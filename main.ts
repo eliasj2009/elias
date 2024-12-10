@@ -78,6 +78,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     sprites.destroy(otherSprite)
     info.changeLifeBy(-1)
 })
+let laserH: Sprite = null
+let laserV: Sprite = null
 let patoboom: Sprite = null
 let boti: Sprite = null
 let guardias: Sprite = null
@@ -86,7 +88,7 @@ let vida_escudo = 0
 let projectile: Sprite = null
 let nave: Sprite = null
 let recarga = 0
-info.setScore(480)
+info.setScore(240)
 info.setLife(5)
 recarga = 0
 let generarjefe = 0
@@ -281,7 +283,7 @@ nave = sprites.create(img`
 controller.moveSprite(nave)
 nave.setPosition(78, 104)
 nave.setStayInScreen(true)
-nave.setScale(0.5, ScaleAnchor.Middle)
+nave.setScale(0.4, ScaleAnchor.Middle)
 game.onUpdate(function () {
     if (Math.percentChance(50)) {
     	
@@ -340,7 +342,7 @@ forever(function () {
         pause(5000)
         recarga += -5
     }
-    if (info.score() % 490 == 0) {
+    if (info.score() % 240 == 0) {
         info.changeScoreBy(10)
         generarjefe += 1
         for (let index = 0; index < 4; index++) {
@@ -349,11 +351,50 @@ forever(function () {
         }
         jefe1 = sprites.create(assets.image`myImage`, SpriteKind.boss)
         jefe1.setPosition(76, 16)
-        vida_escudo = 20
+        vida_escudo = 2
         jefe1.setBounceOnWall(true)
         jefe1.vx = 20
     }
-    if (true) {
-    	
+    if (generarjefe == 2) {
+        jefe1.vx = 0
+        jefe1.setBounceOnWall(false)
+        if (randint(1, 2) % 2 == 0) {
+            jefe1.setPosition(randint(0, scene.screenWidth()), 15)
+            animation.runImageAnimation(
+            jefe1,
+            assets.animation`myAnim2`,
+            200,
+            false
+            )
+            pause(1000)
+            laserV = sprites.createProjectileFromSprite(assets.image`myImage10`, jefe1, 0, 0)
+        } else {
+            jefe1.setPosition(15, randint(0, scene.screenHeight()))
+            animation.runImageAnimation(
+            jefe1,
+            assets.animation`myAnim1`,
+            200,
+            false
+            )
+            pause(1000)
+            laserH = sprites.createProjectileFromSprite(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, jefe1, 0, 0)
+        }
     }
 })
